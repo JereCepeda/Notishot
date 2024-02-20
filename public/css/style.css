@@ -1,0 +1,109 @@
+.container{
+    margin-top: 20px;
+
+}
+.avatar{
+    width: 35px;
+}
+
+.container-avatar{
+    width: 35px;
+    height: 35px;
+    border-radius: 900px;
+    overflow: hidden;
+    float: left;
+}
+
+.navbar .container-avatar img{
+ height: 100%;   
+}
+.card-body > .likes
+{   
+    padding: 10px;
+}
+
+.card-header > .data-user{
+    font-weight: bold;
+}
+
+.col-md-6 > .pub_image{
+    margin-bottom: 20px;
+}
+
+.image-container{
+    width: 100%;
+    max-height: 400px;
+    overflow: hidden;
+}
+.image-container-detail img{
+    width: 100%;
+    max-height: 500px;
+    overflow: hidden;
+}
+
+.image-container img{
+width: 100%;
+}
+
+.card-body{
+padding: 0px !important;
+}
+
+.description{
+    padding: 1em;
+    padding-bottom: 0px;
+}
+
+.nickname{
+    color:gray;
+}
+
+.comentarios{
+    margin: 10px;
+    margin-top:0px;
+}
+.comments{
+    padding:20px;
+}
+
+.comentario{
+    padding: 5px;
+}
+
+.number_likes{
+    color:gray;
+    font-size:  13px;
+}
+
+.profile-user{
+    margin-top: 40px;
+    height: 200px;
+}
+
+.profile-user > .container-profile{
+    width: 200px;
+    height: 200px;
+    border-radius: 900px;
+    overflow: hidden;
+    float: left;
+}
+
+.profile-user .container-profile img{
+    height: 100%;
+    width: 100%;
+}
+
+.profile-user .user-info{
+    margin-top: 30px;
+    margin-left: 30px;
+    float:left;
+}
+
+.col-md-8{
+    background-color: rgb(245,245,245);
+    border-radius: 20px;
+}
+
+.dropdown-toggle::after {
+    display: none;
+}
