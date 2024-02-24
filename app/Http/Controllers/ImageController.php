@@ -2,23 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Comment;
-use App\Models\Image;
 use App\Models\Like;
+use App\Models\Image;
+use App\Models\Comment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
-use Illuminate\Http\Response;
+use Illuminate\Http\RedirectResponse;
+use Google\Cloud\Storage\StorageClient;
 use Illuminate\Support\Facades\Storage;
 
 class ImageController extends Controller
 {
+    protected $storage;    
+    protected $bucket;
+
+    public function __construct()
+    {
+        $this->storage= new StorageClient(['keyFilePath' => base_path().'\credentials.json']);
+        $this->bucket = $this->storage->bucket('uploadsimg');
+    }
     
     public function create()  {
         return view('image.create');
     }
 
     public function Pcreate(Request $request) {
+
         
         $user = Auth::user();
         $img = new Image();
@@ -27,9 +37,18 @@ class ImageController extends Controller
         
         if($request->file('image_path')){
             $img_name = time().$request->file('image_path')->getClientOriginalName();
-            Storage::disk('public')->put('images/'.$img_name,File::get($request->file('image_path')));
-            $img->image_path = $img_name;
+            $imageContents = file_get_contents($request->file('image_path')->path());
+            $this->bucket->upload($imageContents,
+                [
+                    'name' => 'public/storage/images/' . $img_name, 
+                    'metadata' => ['contentType' => 'image/jpeg',],
+                ]);
+            if (is_resource($imageContents)) {
+                fclose($imageContents);
+            }
+            $img->image_path = $img_name;    
         }
+
         $img->save(); 
         return redirect()->route('welcome')->with([
             "message" => "Archivo subido correctamente"
@@ -44,9 +63,12 @@ class ImageController extends Controller
     }
 
     public function Get_Image($filename) {
-        $file = Storage::disk('public')->get('images/'.$filename);
-        return new Response($file,200);
-    }   
+        $object = $this->bucket->object('public/storage/images/' . $filename);
+        $file = $object->signedUrl(now()->addMinutes(200), [
+            'version' => 'v4',
+        ]);
+        return new RedirectResponse($file);
+    }
 
     public function delete($id) {
         $user = Auth::user();
@@ -62,11 +84,13 @@ class ImageController extends Controller
                 foreach($likes as $like)
                 {$like->delete();}
             }
-            Storage::disk('public')->delete('images/'.$image->image_path);
+            $object = $this->bucket->object('public/storage/images/'.$image->image_path);
+            $object->delete();
+
             $image->delete();
             $msj = array('message'=>'La imagen se ha borrado');
         }else{
-            $msj = array('message'=>'La imagen no se ha borrad');
+            $msj = array('message'=>'La imagen no se ha borrado');
         }
         return redirect()->route('image.galeria')->with($msj);
 

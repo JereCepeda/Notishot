@@ -33,15 +33,16 @@
       .nav-link{
         padding: 0 !important;
       }
-      body{
-        margin: 0;
-        height: 100%;
-        background: no-repeat;
-        background-image: url('/storage/img/backgroundNotishot.png');
-        background-attachment:fixed; 
-        width: 100%;
-        background-size: cover;
-      }
+      body {
+    margin: 0;
+    height: 100%;
+    background: no-repeat;
+    background-image: url('https://storage.googleapis.com/uploadsimg/public/storage/img/backgroundNotishot.png');
+    background-attachment: fixed;
+    width: 100%;
+    background-size: cover;
+    }
+
       html {
         height: 100%;
       }

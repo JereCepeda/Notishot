@@ -29,7 +29,7 @@ return [
     |
     */
 
-    'env' => env('APP_ENV', 'production'),
+    'env' => env('APP_ENV', 'local'),
 
     /*
     |--------------------------------------------------------------------------
@@ -170,7 +170,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\FormatTimeServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class
-    ])->toArray(),
+        ])->toArray(),
 
     /*
     |--------------------------------------------------------------------------
