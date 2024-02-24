@@ -19,7 +19,7 @@ class ImageController extends Controller
 
     public function __construct()
     {
-        $this->storage= new StorageClient(['keyFilePath' => base_path().'\credentials.json']);
+        $this->storage= new StorageClient(['keyFilePath' => env('GOOGLE_CLOUD_KEY_FILE')]);
         $this->bucket = $this->storage->bucket('uploadsimg');
     }
     
