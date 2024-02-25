@@ -8,6 +8,7 @@ use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use App\Models\GoogleCloudCredential;
 use Illuminate\Http\RedirectResponse;
 use Google\Cloud\Storage\StorageClient;
 use Illuminate\Support\Facades\Storage;
@@ -19,8 +20,12 @@ class ImageController extends Controller
 
     public function __construct()
     {
-        $this->storage= new StorageClient(['keyFilePath' => env('GOOGLE_CLOUD_KEY_FILE')]);
-        $this->bucket = $this->storage->bucket('uploadsimg');
+        $credentials= GoogleCloudCredential::first();
+        $temp =[ 'type' => 'service_account','project_id' => $credentials->project_id,'private_key_id' => $credentials->private_key_id,'private_key' => $credentials->private_key,'client_email' => $credentials->client_email,'client_id' => $credentials->client_id,"auth_uri"=> "https://accounts.google.com/o/oauth2/auth","token_uri"=> "https://oauth2.googleapis.com/token","auth_provider_x509_cert_url"=> "https://www.googleapis.com/oauth2/v1/certs","client_x509_cert_url"=> "https://www.googleapis.com/robot/v1/metadata/x509/laravel-notishot%40beaming-theorem-415323.iam.gserviceaccount.com","universe_domain"=> "googleapis.com"];
+        $tempFilePath = tempnam(sys_get_temp_dir(), 'gcloud_credentials');
+        file_put_contents($tempFilePath, json_encode($temp));
+        $this->storage = new StorageClient(['keyFilePath' => $tempFilePath]);
+        $this->bucket = $this->storage->bucket(env('GOOGLE_CLOUD_STORAGE_BUCKET'));
     }
     
     public function create()  {
