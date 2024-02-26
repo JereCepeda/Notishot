@@ -45,13 +45,11 @@
                         }
                     @endphp
                     @if ($user_like)
-                        <img src="{{ url('storage/img/heartred.png')}}" data-id="{{ $imagen->id }}" class="btn-dislike p-2"/>
-                    @else 
-                        @can('publicacion.like')
-                            <img src="{{ url('storage/img/heartgray.png')}}" data-id="{{ $imagen->id }}" class="btn-like p-2"/>
-                        @else
-                            <img src="{{ url('storage/img/heartgray.png')}}"/>
-                        @endcan
+                    <button type="button" data-env="{{env('APP_URL')}}" data-id="{{ $image->id }}" class="btn btn-dislike p-2"><i class="bi bi-heart-fill" style="color:red" ></i></button>
+                    @elseif($user && $user->can('publicacion.like'))
+                        <button type="button" data-env="{{env('APP_URL')}}" data-id="{{ $image->id }}" class="btn btn-like p-2"><i class="bi bi-heart-fill" ></i></button>
+                    @else
+                        <img src="{{ url(env('APP_URL').'/uploadsimg/public/storage/img/heartgray.png')}}"/>
                     @endif
                     <span class="number_likes">{{count($imagen->likes)}}</span>
                 </div>
