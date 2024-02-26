@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('project_id');
             $table->string('private_key_id');
-            $table->string('private_key');
+            $table->longText('private_key');
             $table->string('client_email');
             $table->string('client_id');
 
