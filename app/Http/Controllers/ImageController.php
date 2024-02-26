@@ -17,14 +17,27 @@ class ImageController extends Controller
 {
     protected $storage;    
     protected $bucket;
+    protected $privateKey;
 
     public function __construct()
     {
         $credentials= GoogleCloudCredential::first();
-        $temp =[ 'type' => 'service_account','project_id' => $credentials->project_id,'private_key_id' => $credentials->private_key_id,'private_key' => $credentials->private_key,'client_email' => $credentials->client_email,'client_id' => $credentials->client_id,"auth_uri"=> "https://accounts.google.com/o/oauth2/auth","token_uri"=> "https://oauth2.googleapis.com/token","auth_provider_x509_cert_url"=> "https://www.googleapis.com/oauth2/v1/certs","client_x509_cert_url"=> "https://www.googleapis.com/robot/v1/metadata/x509/laravel-notishot%40beaming-theorem-415323.iam.gserviceaccount.com","universe_domain"=> "googleapis.com"];
-        $tempFilePath = tempnam(sys_get_temp_dir(), 'gcloud_credentials');
-        file_put_contents($tempFilePath, json_encode($temp));
-        $this->storage = new StorageClient(['keyFilePath' => $tempFilePath]);
+        $this->privateKey = stripcslashes($credentials->private_key);
+        $this->storage = new StorageClient([
+            'projectId' => $credentials->project_id,
+            'keyFile' =>[ 
+                'type' => 'service_account',
+                'project_id' => $credentials->project_id,
+                'private_key_id' => $credentials->private_key_id,
+                'private_key' => $this->privateKey,
+                'client_email' => $credentials->client_email,
+                'client_id' => $credentials->client_id,
+                "auth_uri"=> "https://accounts.google.com/o/oauth2/auth",
+                "token_uri"=> "https://oauth2.googleapis.com/token",
+                "auth_provider_x509_cert_url"=> "https://www.googleapis.com/oauth2/v1/certs",
+                "client_x509_cert_url"=> "https://www.googleapis.com/robot/v1/metadata/x509/laravel-notishot%40beaming-theorem-415323.iam.gserviceaccount.com",
+                "universe_domain"=> "googleapis.com"]
+            ]);
         $this->bucket = $this->storage->bucket(env('GOOGLE_CLOUD_STORAGE_BUCKET'));
     }
     
@@ -72,7 +85,7 @@ class ImageController extends Controller
         $file = $object->signedUrl(now()->addMinutes(200), [
             'version' => 'v4',
         ]);
-        return new RedirectResponse($file);
+                return new RedirectResponse($file);
     }
 
     public function delete($id) {
