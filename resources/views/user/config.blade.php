@@ -39,6 +39,21 @@
                             <input type="text" class="form-control" id="nick" name="nick" required value="{{ Auth::user()->nick }}">
                         </div>
                     </div>
+                    <div class="form-switch form-group row ">
+                        <label for="rol" class="col-md-4 col-form-label text-md-right">{{ __('Cambiar a Redactor') }}</label>
+                        <div class="col-md-6 m-2">
+
+                            @if(Auth::user()->role=="lector")
+                            
+                                <input class="form-control form-check-input" style="margin-left:1%" type="checkbox" id="flexSwitchCheckDefault" value="{{ Auth::user()->role }}" >
+                                <input type="hidden" id="lector" value ="{{ Auth::user()->role }}" />
+                            @else
+                                <input class="form-control form-check-input" style="margin-left:1%" type="checkbox" id="flexSwitchCheckDefault" checked value="{{ Auth::user()->role }}" >
+                                <input type="hidden" id="redactor" value ="{{ Auth::user()->role }}" />
+                            @endif
+                        </div>
+                    </div>
+
                     <div class="form-group row">
                         <div class="col-4">
                         </div>
@@ -57,7 +72,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <div class="col-md-8 offset-md-4">
+                        <div class=" offset-md-4">
                             <button type="submit" class="btn btn-primary">
                                 {{ __('Guardar Cambios') }}
                             </button>

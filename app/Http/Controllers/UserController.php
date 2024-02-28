@@ -55,7 +55,6 @@ class UserController extends BaseController
     public function POST_update(Request $request)  {
         $user = Auth::user();   
         $id = $user->id;
-        
         $validador = Validator::make($request->all(),[
             'name' => 'string|max:250',
             'surname' => 'string|max:250',
@@ -67,21 +66,22 @@ class UserController extends BaseController
         $user->email=$request->input('email');
         $user->surname=$request->input('surname');
         $user->nick=$request->input('nick');
-        
+        if($request->file('image')){
         $imgpath = file_get_contents($request->file('image')->path());
-        if(is_file($imgpath))
-            {
-                $imgname=$request->file('image')->getClientOriginalName();
-                $this->bucket->upload($imgpath,
-                    [
-                        'name' => 'public/storage/users/' . $imgname, 
-                        'metadata' => ['contentType' => 'image/jpeg',],
-                    ]);
-                if (is_resource($imgpath)) {
-                    fclose($imgpath);
-                }
-                $user->image = $imgname;
-            } 
+            if(is_file($imgpath))
+                {
+                    $imgname=$request->file('image')->getClientOriginalName();
+                    $this->bucket->upload($imgpath,
+                        [
+                            'name' => 'public/storage/users/' . $imgname, 
+                            'metadata' => ['contentType' => 'image/jpeg',],
+                        ]);
+                    if (is_resource($imgpath)) {
+                        fclose($imgpath);
+                    }
+                    $user->image = $imgname;
+                } 
+            }
         $user->save();
         $msj = array('message'=>'Usuario Actualizado correctamente');
        

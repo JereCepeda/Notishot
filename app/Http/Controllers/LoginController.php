@@ -33,7 +33,7 @@ class LoginController extends Controller
             'password' => Hash::make($request->password),
             'image'=>'avatar.jpeg'
         ]);
-
+        $user->assignRole('lector');
         $user->save();
         return redirect()->route('welcome')->with('success', 'Registration success. Please login!');
     }

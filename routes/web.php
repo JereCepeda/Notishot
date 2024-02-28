@@ -64,6 +64,8 @@ Route::middleware(['web', 'auth','can:publicacion.like'])->group(function () {
 
 Route::middleware(['web', 'auth', 'can:usuarios.listar'])->group(function () {
     Route::get('/admin/users', [AdminController::class,'userList'])->name('user.admin.list');
+    Route::get('/admin/datatable', [AdminController::class,'GET_datatable'])->name('admin.datatable');
+    
     Route::post('/admin/users/{user}/permissions', [AdminController::class,'updatePermissions'])->name('user.admin.update_permissions');
     Route::post('/admin/users/{user}/block', [AdminController::class,'blockUser'])->name('user.admin.block');
 });
