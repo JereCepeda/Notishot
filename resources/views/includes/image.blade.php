@@ -29,7 +29,7 @@
             @elseif($user && $user->can('publicacion.like'))
                 <button type="button" data-env="{{env('APP_URL')}}" data-id="{{ $image->id }}" class="btn btn-like p-2"><i class="bi bi-heart-fill" ></i></button>
             @else
-                <img src="{{ url('storage/img/heartgray.png')}}"/>
+                <img src="{{ url('https://storage.googleapis.com/uploadsimg/public/storage/img/heartgray.png')}}"/>
             @endif
             <span class="number_likes">
                 {{count($image->likes)}}
